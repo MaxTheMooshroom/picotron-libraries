@@ -7,7 +7,7 @@ Will probably provide [Teal](https://teal-language.org/) type-definition files a
 
 ## Libraries
 
-- array - A module stub for working with wrapped [userdata](https://www.lexaloffle.com/dl/docs/picotron_userdata.html) to introduce [slices](https://en.wikipedia.org/wiki/Array_slicing) of userdata.
+- array - A library stub for working with wrapped [userdata](https://www.lexaloffle.com/dl/docs/picotron_userdata.html) to introduce [slices](https://en.wikipedia.org/wiki/Array_slicing) of userdata.
 - extern - A place for 3rd-party libraries (such as [30log](https://github.com/Yonaba/30log)) to go.
 - gfx - A graphics library I never went anywhere with or finished, mostly because of [AbledBody's Blade3D](https://github.com/abledbody/blade3d) library.
 - struct - A library for parsing binary files using [DSDL](#), a __Data Structure Definition Language__, which lacks a lua implementation (And the EBNF isn't finished).
