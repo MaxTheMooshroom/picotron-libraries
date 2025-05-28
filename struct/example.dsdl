@@ -1,0 +1,47 @@
+--[[pod_format="raw",created="2025-05-05 17:39:19",modified="2025-05-05 17:44:13",revision=1]]
+
+struct MyStructA {
+    a: i32,
+    b: u8,
+}
+
+struct MyStructB {
+    a: u16,
+    b: [@{self::a}; i32], // num elements in array is value at MyStructB::a
+    c: MyStructA,
+    d: [=5; u8], // length of array is equal to 5, every element is a u8
+
+    // length of array is equal to MyStructB::a, up to and including 512
+    // (if a is larger, it caps at 512. This does not describe bounds on MyStructB::a)
+    f: [@{self::a}<=512; u8],
+    g: {self::f}[u32], // g is an index into MyStructB::f
+}
+
+// describes a dynamic type that can be determined from
+// values resolved before this one
+enum MyVarType {
+    0: u8,
+    3: i32,
+}
+
+struct MyStructC {
+    a: u8,
+
+    // if MyStructC::a isn't 0 or 3, error at read-time
+    // (those are the valid enum values defined for MyVarType)
+    b: MyVarType@{self::a},
+}
+
+struct MyStructD {
+    a: u8,
+    b: MyStructE<{self}>,
+}
+
+struct MyStructE<T: MyStructD> {
+    a: u8,
+    b: MyVarType@{T::a},
+}
+
+struct MyStructF {
+    a: u8<bool, bool, u3, u2>,
+}
