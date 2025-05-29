@@ -1,0 +1,14 @@
+{
+    "files.exclude": {
+        "**/*.rpyc": true,
+        "**/*.rpa": true,
+        "**/*.rpymc": true,
+        "**/cache/": true
+    },
+    "Lua.diagnostics.globals": [
+        "send_message"
+    ],
+    "Lua.diagnostics.disable": [
+        "lowercase-global"
+    ]
+}

@@ -1,5 +1,6 @@
 --[[pod_format="raw",created="2025-03-26 05:34:29",icon=userdata("u8",16,16,"00121212121212121212120000000000001217171717171717170e1200000000001217171717171717170e0e12000000001217171717171717170e0e0e120000001217171712121212170e0e0e0e120000121717121d1d1d1d121717171712000012171717121d1d12171717171712000012171717121d1d12171717171712000012171717121d1d12171217171712000012171717121d1d12121d121717120000121717121d1d1d1d1d1d12171712000012171717121212121212171717120000121717171717171717171717171200001217171717171717171717171712000012171717171717171717171717120000121212121212121212121212121200"),modified="2025-04-12 22:03:28",revision=33]]
 
+do
 local _debug = debug
 
 function report_error(title, ...)
@@ -16,6 +17,7 @@ function todo(msg)
         "todo: not yet implemented!",
         msg,
         "==========",
+		---@diagnostic disable-next-line: need-check-nil
         _debug.traceback(nil, 2)
     )
     exit(2)
@@ -26,9 +28,11 @@ function unimplemented()
         "unimplemented!",
         "(and probably never will be)",
         "==========",
+		---@diagnostic disable-next-line: need-check-nil
         _debug.traceback(nil, 2)
     )
     exit(2)
+end
 end
 
 --- Checks if table `value` is a @see class object.

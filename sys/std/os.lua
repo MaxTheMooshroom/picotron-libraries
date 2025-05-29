@@ -1,5 +1,4 @@
---[[pod_format="raw",created="2025-03-26 05:36:29",icon=userdata("u8",16,16,"00121212121212121212120000000000001217171717171717170e1200000000001217171717171717170e0e12000000001217171717171717170e0e0e120000001217171712121212170e0e0e0e120000121717121d1d1d1d121717171712000012171717121d1d12171717171712000012171717121d1d12171717171712000012171717121d1d12171217171712000012171717121d1d12121d121717120000121717121d1d1d1d1d1d12171712000012171717121212121212171717120000121717171717171717171717171200001217171717171717171717171712000012171717171717171717171717120000121212121212121212121212121200"),modified="2025-05-17 12:44:32",revision=69]]
---[[hidden_imports={"sys.term","luatz"}]]
+--[[pod_format="raw",created="2025-03-26 05:36:29",icon=userdata("u8",16,16,"00121212121212121212120000000000001217171717171717170e1200000000001217171717171717170e0e12000000001217171717171717170e0e0e120000001217171712121212170e0e0e0e120000121717121d1d1d1d121717171712000012171717121d1d12171717171712000012171717121d1d12171717171712000012171717121d1d12171217171712000012171717121d1d12121d121717120000121717121d1d1d1d1d1d12171712000012171717121212121212171717120000121717171717171717171717171200001217171717171717171717171712000012171717171717171717171717120000121212121212121212121212121200"),modified="2025-05-29 06:52:23",revision=78]]
 
 os = {}
 
@@ -10,23 +9,10 @@ local vars = env().vars or {}
 
 local start_time -- initialized after os.now() is defined
 function os.clock()
-	local now = {os.now() - start_time[1], math.abs(os.now(true) - start_time[2])}
-	return now[1] + (now[2] / 1000)
+	return (os.now() - start_time) // 1000
 end
 
-function os.date(format, _time)
-	local luatz = require("luatz")
-	local tz_local = os.setlocale(nil, "time")
-	local tz_utc = luatz.get_tz("utc")
-
-	format = format or "!%Y-%m-%d %H:%M:%S"
-
-	if format == "*t" or format == "!*t" then
-		return date(format)
-	else
-		return dt:fmt(format)
-	end
-end
+os.date = date
 
 function os.difftime(t2, t1) return t2 - t1 end
 
@@ -88,21 +74,12 @@ function os.setlocale(locale, category)
 end
 
 function os.time(tbl)
-	local luatz = require("luatz")
 	if type(tbl) == "table" then
 		local tz_local = os.setlocale(nil, "time")
-		local dt = luatz.date({
-			year = tbl.year,
-			month = tbl.month,
-			day = tbl.day,
-			hour = tbl.hour or 12,
-			minute = tbl.min or 0,
-			second = tbl.sec or 0,
-			tz = tz_local
-		})
+		todo()
 		return dt:posix()
 	elseif not tbl then
-		return os.now()
+		return math.tointeger(os.now())
 	end
 end
 
@@ -164,29 +141,19 @@ function os.yield()
 	flip(0x4)
 end
 
+-- yield out of the process for a given number of seconds.
+-- events are still handled while sleeping.
 function os.sleep(secs)
 	if not secs or secs == 0 then flip(); return end
 	send_message(pid(), {event="unpause", _delay=secs})
 	os.yield()
 end
 
-local tick_count = 0
-function os.tick()
-	tick_count = math.floor((tick_count + 1) % 60)
-end
-
--- get the current time as a unix timestamp OR
--- as the number of milliseconds into the current
--- second of how many seconds picotron has been
--- running if passing value `true`.
+-- current time as unix timestamp in ms instead of secs
 function os.now(ms)
-	if ms then
-		return stat(987) % 1000
-	else
-		return stat(86)
-	end
+	return math.tointeger(stat(86) * 1000 + stat(987))
 end
-start_time = {os.now(), os.now(true)}
+start_time = os.now()
 
 
 
